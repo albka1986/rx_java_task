@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.chisw.rxjavatask.model.Item
 import com.chisw.rxjavatask.network.ApiService
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -20,26 +21,51 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        click_btn.setOnClickListener { getStoriesFromTwoPages() }
+        click_btn.setOnClickListener { onBtnPressed() }
     }
 
-    private fun getStoriesFromTwoPages() {
+    private fun onBtnPressed() {
+//        taskFirst()
+        taskSecond()
+
+    }
+
+    private fun taskSecond() {
         apiService.getStoriesByPage(0)
-                .zipWith(apiService.getStoriesByPage(1), BiFunction<Item, Item, Array<String>> { list1, list2 ->
-                    return@BiFunction arrayOf(list1.hits.plus(list2.hits).joinToString("\n") { story -> story.title })
-                })
+                .flattenAsObservable {
+                    (it.hits.asIterable()).map { apiService.getUserByname(it.author) }
+                }
                 .subscribeOn(Schedulers.io())
+
                 .observeOn(AndroidSchedulers.mainThread())
+
+
                 .subscribe(
                         { result ->
-                            Log.d("getStoriesFromTwoPages", result.joinToString("\n"))
+                            Log.d("onBtnPressed", result.toString())
                         },
                         { error ->
                             Log.e("test", error.message)
                         }
                 )
 
+    }
 
+    private fun taskFirst() {
+        Single.zip(apiService.getStoriesByPage(0), apiService.getStoriesByPage(1), BiFunction<Item, Item, List<String>> { list1, list2 ->
+            list1.hits.plus(list2.hits).map { it.title }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result ->
+                            Log.d("onBtnPressed", result.toString())
+                            Log.d("onBtnPressed", result.size.toString())
+                        },
+                        { error ->
+                            Log.e("test", error.message)
+                        }
+                )
     }
 
 

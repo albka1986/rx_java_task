@@ -2,11 +2,13 @@ package com.chisw.rxjavatask.network
 
 import com.chisw.rxjavatask.BuildConfig
 import com.chisw.rxjavatask.model.Item
+import com.chisw.rxjavatask.model.User
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -29,5 +31,8 @@ interface ApiService {
 
     @GET("search_by_date?tags=story&")
     fun getStoriesByPage(@Query("page") page: Int): Single<Item>
+
+    @GET("users/{username}")
+    fun getUserByname(@Path("username") username: String): Single<User>
 
 }

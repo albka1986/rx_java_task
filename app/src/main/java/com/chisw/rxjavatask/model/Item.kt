@@ -3,7 +3,7 @@ package com.chisw.rxjavatask.model
 /**
  * Created by Ponomarenko Oleh on 15.06.2018.
  */
-class Item(var hits: Array<Story>) {
+class Item(var hits: List<Story>) {
 
     data class nbHits(val nbHits: Int)
     data class page(val page: Int)
