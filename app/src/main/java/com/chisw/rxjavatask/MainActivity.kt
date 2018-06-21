@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.chisw.rxjavatask.model.Item
-import com.chisw.rxjavatask.model.Story
 import com.chisw.rxjavatask.network.ApiService
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
@@ -32,10 +30,12 @@ class MainActivity : AppCompatActivity() {
 //        taskThird()
     }
 
+
     /**
     Load stories from the 1 and 2 pages
     Print a list of titles from two pages
      */
+    @Suppress("unused")
     private fun taskFirst() {
         Single.zip(apiService.getStoriesByPage(0), apiService.getStoriesByPage(1), BiFunction<Item, Item, List<String>> { list1, list2 ->
             list1.hits.plus(list2.hits).map { it.title }
@@ -60,10 +60,13 @@ class MainActivity : AppCompatActivity() {
      */
     private fun taskSecond() {
         apiService.getStoriesByPage(0)
-                .subscribeOn(Schedulers.io())
+                .map { it.hits }
                 .toObservable()
-                .flatMap { Observable.fromIterable(it.hits.asIterable()).map { t: Story -> apiService.getUserByName(t.author) } }
+                .flatMapIterable { it }
+                .flatMap { apiService.getUserByName(it.author).toObservable() }
+                .filter { it.karma > 3000 }
                 .toList()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { result ->
@@ -81,6 +84,7 @@ class MainActivity : AppCompatActivity() {
      * Create a maybe source, that emits “Bang!” string and completes or finishes with an IllegalArgumentException.
      * Use randomizer to decide what to emit.
      */
+    @Suppress("unused")
     private fun taskThird() {
 
 
