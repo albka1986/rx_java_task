@@ -33,6 +33,6 @@ interface ApiService {
     fun getStoriesByPage(@Query("page") page: Int): Single<Item>
 
     @GET("users/{username}")
-    fun getUserByname(@Path("username") username: String): Single<User>
+    fun getUserByName(@Path("username") username: String): Single<User>
 
 }
