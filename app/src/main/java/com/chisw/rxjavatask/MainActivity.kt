@@ -5,13 +5,19 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.chisw.rxjavatask.model.Item
 import com.chisw.rxjavatask.network.ApiService
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG: String = "result"
+    }
 
     private val apiService by lazy {
         ApiService.create()
@@ -26,8 +32,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun onBtnPressed() {
 //        taskFirst()
-        taskSecond()
-//        taskThird()
+//        taskSecond()
+        taskThird()
     }
 
 
@@ -44,8 +50,8 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { result ->
-                            Log.d("onBtnPressed", result.toString())
-                            Log.d("onBtnPressed", result.size.toString())
+                            Log.e(TAG, result.toString())
+                            Log.e(TAG, result.size.toString())
                         },
                         { error ->
                             Log.e("test", error.message)
@@ -70,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { result ->
-                            Log.d("onBtnPressed", result.toString())
+                            Log.e(TAG, result.toString())
                         },
                         { error ->
                             Log.e("test", error.message)
@@ -81,13 +87,23 @@ class MainActivity : AppCompatActivity() {
 
 
     /**
-     * Create a maybe source, that emits “Bang!” string and completes or finishes with an IllegalArgumentException.
+     * Create a maybe source, that emits “Bang!” string or finishes with an IllegalArgumentException.
      * Use randomizer to decide what to emit.
      */
     @Suppress("unused")
     private fun taskThird() {
-
-
+        Maybe.create<String> { emitter ->
+            if (Random().nextBoolean()) {
+                emitter.onSuccess("Bang!")
+            } else {
+                emitter.onError(IllegalArgumentException())
+            }
+        }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError { Log.e(TAG, "error", it) }
+                .doOnSuccess { Log.e(TAG, it) }
+                .subscribe()
     }
 
 
