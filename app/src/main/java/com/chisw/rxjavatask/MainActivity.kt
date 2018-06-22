@@ -149,7 +149,20 @@ class MainActivity : AppCompatActivity() {
                 )
     }
 
-
+    /**
+     * Task 6.1
+     *  Create an extension to SingleSource that logs current thread. Should work similar to RxJava operators.
+     *  Should print “Current thread: thread name”
+     *  Task 6.2
+     *  Create an extension to SingleSource, ObservableSource and MaybeSource that subscribes on Schedulers.io() and observes on AndroidSchedulers.mainThread()
+     *
+     *  Task 6.3
+     *  Create an extension that accepts disposable and adds it to a CompositeDisposable.
+     *  Example:
+     *  safeSubscribe{
+     *  observable.subscribeOn(...).observeOn(...).subscribe(...)
+     *  }
+     */
 
 
 }
