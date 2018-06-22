@@ -33,7 +33,8 @@ class MainActivity : AppCompatActivity() {
     private fun onBtnPressed() {
 //        taskFirst()
 //        taskSecond()
-        taskThird()
+//        taskThird()
+        taskFourth()
     }
 
 
@@ -104,6 +105,27 @@ class MainActivity : AppCompatActivity() {
                 .doOnError { Log.e(TAG, "error", it) }
                 .doOnSuccess { Log.e(TAG, it) }
                 .subscribe()
+    }
+
+    /**
+     * Create a maybe source, that emits “Bang!” string and completes or completes without emitting.
+     * Use randomizer to decide what to emit.
+     */
+    @Suppress("unused")
+    private fun taskFourth() {
+        Maybe.create<String> { emitter ->
+            if (Random().nextBoolean()) {
+                emitter.onSuccess("Bang!")
+            } else {
+                emitter.onComplete()
+            }
+        }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete { Log.e(TAG, "doOnComplete") }
+                .doOnSuccess { Log.e(TAG, it) }
+                .subscribe()
+
     }
 
 
