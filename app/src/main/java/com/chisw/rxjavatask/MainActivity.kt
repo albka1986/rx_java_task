@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         ApiService.create()
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,9 +34,8 @@ class MainActivity : AppCompatActivity() {
 //        taskSecond()
 //        taskThird()
 //        taskFourth()
-        taskFifth()
+//        taskFifth()
     }
-
 
     /**
     Load stories from the 1 and 2 pages
@@ -66,6 +64,7 @@ class MainActivity : AppCompatActivity() {
     For all stories load author’s info
     Print only authors with karma greater than 3000
      */
+    @Suppress("unused")
     private fun taskSecond() {
         apiService.getStoriesByPage(0)
                 .map { it.hits }
@@ -86,7 +85,6 @@ class MainActivity : AppCompatActivity() {
                 )
 
     }
-
 
     /**
      * Create a maybe source, that emits “Bang!” string or finishes with an IllegalArgumentException.
@@ -150,6 +148,8 @@ class MainActivity : AppCompatActivity() {
                         { Log.e(TAG, "You're live") }
                 )
     }
+
+
 
 
 }
