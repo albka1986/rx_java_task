@@ -34,7 +34,8 @@ class MainActivity : AppCompatActivity() {
 //        taskFirst()
 //        taskSecond()
 //        taskThird()
-        taskFourth()
+//        taskFourth()
+        taskFifth()
     }
 
 
@@ -126,6 +127,28 @@ class MainActivity : AppCompatActivity() {
                 .doOnSuccess { Log.e(TAG, it) }
                 .subscribe()
 
+    }
+
+    /**
+     * Use maybe source from the previous task
+     * Transform it to single
+     * Print “Bang” from maybe or "You're live" in other case
+     */
+    @Suppress("unused")
+    private fun taskFifth() {
+        Maybe.create<String> { emitter ->
+            if (Random().nextBoolean()) {
+                emitter.onSuccess("Bang!")
+            } else {
+                emitter.onComplete()
+            }
+        }.toSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { Log.e(TAG, it) },
+                        { Log.e(TAG, "You're live") }
+                )
     }
 
 
