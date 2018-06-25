@@ -16,7 +16,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        private const val TAG: String = "result"
+        const val TAG: String = "result"
     }
 
     private val apiService by lazy {
@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 //        taskThird()
 //        taskFourth()
 //        taskFifth()
+        taskSixth()
     }
 
     /**
@@ -153,6 +154,7 @@ class MainActivity : AppCompatActivity() {
      * Task 6.1
      *  Create an extension to SingleSource that logs current thread. Should work similar to RxJava operators.
      *  Should print “Current thread: thread name”
+     *
      *  Task 6.2
      *  Create an extension to SingleSource, ObservableSource and MaybeSource that subscribes on Schedulers.io() and observes on AndroidSchedulers.mainThread()
      *
@@ -163,6 +165,16 @@ class MainActivity : AppCompatActivity() {
      *  observable.subscribeOn(...).observeOn(...).subscribe(...)
      *  }
      */
+    @Suppress("unused")
+    private fun taskSixth() {
+        apiService.getStoriesByPage(0).log()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { Log.e(TAG, "successful") },
+                        { Log.e(TAG, "Failed") }
+                )
+    }
 
 
 }
