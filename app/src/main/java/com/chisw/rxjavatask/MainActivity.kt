@@ -8,6 +8,7 @@ import com.chisw.rxjavatask.network.ApiService
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -167,14 +168,32 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskSixth() {
+//        taskSixth1()
+//        taskSixth2()
+        taskSix3()
+    }
+
+    private fun taskSixth1() {
         apiService.getStoriesByPage(0).log()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { Log.e(TAG, "successful") },
-                        { Log.e(TAG, "Failed") }
+                        { Log.e(TAG, "failed") }
                 )
     }
 
+    private fun taskSixth2() {
+        apiService.getStoriesByPage(0)
+                .subscribeCustom()
+                .subscribe(
+                        { Log.e(TAG, "successful") },
+                        { Log.e(TAG, "failed") }
+                )
 
+    }
+
+    private fun taskSix3() {
+        CompositeDisposable().add(apiService.getStoriesByPage(0).safeSubscribe())
+    }
 }
