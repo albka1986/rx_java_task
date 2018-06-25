@@ -6,12 +6,14 @@ import android.util.Log
 import com.chisw.rxjavatask.model.Item
 import com.chisw.rxjavatask.network.ApiService
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,7 +37,8 @@ class MainActivity : AppCompatActivity() {
 //        taskThird()
 //        taskFourth()
 //        taskFifth()
-        taskSixth()
+//        taskSixth()
+        taskSeventh()
     }
 
     /**
@@ -200,6 +203,19 @@ class MainActivity : AppCompatActivity() {
                         { Log.e(TAG, "successful") },
                         { Log.e(TAG, it.localizedMessage) }
                 ))
+
+    }
+
+    /**
+     * Create an observable that emits values from 0 to 10 every second.
+     * Accumulate every 2 values
+     * Load stories with a page equals to the emitted value
+     */
+    private fun taskSeventh() {
+        Observable.interval(1000L, TimeUnit.MILLISECONDS)
+                .timeInterval()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
 
     }
 
