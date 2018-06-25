@@ -8,7 +8,6 @@ import com.chisw.rxjavatask.network.ApiService
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -160,7 +159,7 @@ class MainActivity : AppCompatActivity() {
      *  Create an extension to SingleSource, ObservableSource and MaybeSource that subscribes on Schedulers.io() and observes on AndroidSchedulers.mainThread()
      *
      *  Task 6.3
-     *  Create an extension that accepts disposable and adds it to a CompositeDisposable.
+     *  Create a function that accepts disposable and adds it to a CompositeDisposable.
      *  Example:
      *  safeSubscribe{
      *  observable.subscribeOn(...).observeOn(...).subscribe(...)
@@ -168,8 +167,8 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskSixth() {
-//        taskSixth1()
-//        taskSixth2()
+        taskSixth1()
+        taskSixth2()
         taskSix3()
     }
 
@@ -188,12 +187,21 @@ class MainActivity : AppCompatActivity() {
                 .subscribeCustom()
                 .subscribe(
                         { Log.e(TAG, "successful") },
-                        { Log.e(TAG, "failed") }
+                        { Log.e(TAG, it.localizedMessage) }
                 )
 
     }
 
     private fun taskSix3() {
-        CompositeDisposable().add(apiService.getStoriesByPage(0).safeSubscribe())
+        safeSubscribe(apiService.getStoriesByPage(0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { Log.e(TAG, "successful") },
+                        { Log.e(TAG, it.localizedMessage) }
+                ))
+
     }
+
+
 }
