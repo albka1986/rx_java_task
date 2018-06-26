@@ -206,18 +206,25 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     /**
      * Create an observable that emits values from 0 to 10 every second.
      * Accumulate every 2 values
      * Load stories with a page equals to the emitted value
      */
     private fun taskSeventh() {
-        Observable.interval(1000L, TimeUnit.MILLISECONDS)
-                .timeInterval()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+        Observable.zip(Observable.range(0, 10), Observable.interval(1000L, TimeUnit.MILLISECONDS), BiFunction<Int, Long, Int> { t1: Int, _: Long ->
+            t1
+        })
+                .filter { item -> item % 2 == 0 }
+                .count()
+                .flatMap { apiService.getStoriesByPage(it.toInt()) }
+                .subscribe(
+                        { Log.e(TAG, "successful") },
+                        { Log.e(TAG, it.localizedMessage) }
+                )
+
 
     }
-
 
 }
