@@ -38,7 +38,11 @@ class MainActivity : AppCompatActivity() {
 //        taskFourth()
 //        taskFifth()
 //        taskSixth()
-        taskSeventh()
+//        taskSeventh()
+        taskEighth()
+//        taskNinth()
+//        taskTenth()
+//        taskEleventh()
     }
 
     /**
@@ -210,6 +214,7 @@ class MainActivity : AppCompatActivity() {
      * Accumulate every 2 values
      * Load stories with a page equals to the emitted value
      */
+    @Suppress("unused")
     private fun taskSeventh() {
         Observable.zip(Observable.range(0, 10), Observable.interval(1000L, TimeUnit.MILLISECONDS), BiFunction<Int, Long, Int> { t1: Int, _: Long ->
             t1
@@ -225,6 +230,56 @@ class MainActivity : AppCompatActivity() {
                         { Log.e(TAG, "Successful") },
                         { Log.e(TAG, it.localizedMessage) }
                 )
+    }
+
+    /**
+     *Create 3 executors
+     *  Load stories from page 0 in the thread 1
+     *  Log thread
+     *  Load stories from page 1 in the thread 2
+     *  Log thread
+     *  Subscribe in the thread 3
+     *  Print a list of titles from two pages and the name of the thread
+     */
+    @Suppress("unused")
+    private fun taskEighth() {
+        ///TODO: "not implemented taskEighth
+    }
+
+    /**
+     * Create an observable that emits values from 0 to 10 every second
+     * Prints “Subscribed” when it is subscribed and prints values in onNext()
+     * In onError it prints an error message
+     * When the value 7 is emitted it should throw Exception(“Your error message”)
+     */
+    @Suppress("unused")
+    private fun taskNinth() {
+        //TODO: "not implemented- taskNinth")
+    }
+
+
+    /**
+     * Choose the most suitable Subject for the next task
+     * Create Subject<Int>
+     *     Post values 1,2,3
+     *     Subscribe to it
+     *     Post values 4, 5, 6
+     *     In the cmd “3,4,5,6” should be printed
+     */
+    @Suppress("unused")
+    private fun taskTenth() {
+        //TODO: "not implemented- taskTenth")
+    }
+
+    /**
+     * Load stories from the page 0
+     * Load 3rd story’s author info
+     * Combine to the new model with fields: author name, karma, story title
+     * Print the result
+     */
+    @Suppress("unused")
+    private fun taskEleventh() {
+        //TODO: "not implemented - taskEleventh"
     }
 
 
