@@ -203,9 +203,7 @@ class MainActivity : AppCompatActivity() {
                         { Log.e(TAG, "successful") },
                         { Log.e(TAG, it.localizedMessage) }
                 ))
-
     }
-
 
     /**
      * Create an observable that emits values from 0 to 10 every second.
@@ -216,15 +214,18 @@ class MainActivity : AppCompatActivity() {
         Observable.zip(Observable.range(0, 10), Observable.interval(1000L, TimeUnit.MILLISECONDS), BiFunction<Int, Long, Int> { t1: Int, _: Long ->
             t1
         })
-                .filter { item -> item % 2 == 0 }
-                .count()
-                .flatMap { apiService.getStoriesByPage(it.toInt()) }
+                .filter { t -> t % 2 != 0 }
+                .toList()
+                .map { it.sum() }
+                .flatMap {
+                    Log.e(TAG, "Number of the page: $it")
+                    apiService.getStoriesByPage(it)
+                }
                 .subscribe(
-                        { Log.e(TAG, "successful") },
+                        { Log.e(TAG, "Successful") },
                         { Log.e(TAG, it.localizedMessage) }
                 )
-
-
     }
+
 
 }
