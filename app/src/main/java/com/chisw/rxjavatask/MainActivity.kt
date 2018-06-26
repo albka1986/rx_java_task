@@ -13,6 +13,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -39,8 +40,8 @@ class MainActivity : AppCompatActivity() {
 //        taskFifth()
 //        taskSixth()
 //        taskSeventh()
-//        taskEighth()
-        taskNinth()
+        taskEighth()
+//        taskNinth()
 //        taskTenth()
 //        taskEleventh()
     }
@@ -221,7 +222,7 @@ class MainActivity : AppCompatActivity() {
         })
                 .filter { t -> t % 2 != 0 }
                 .toList()
-                .map { it.sum() }
+                .map { it.sum() } //TODO Need to check here
                 .flatMap {
                     Log.e(TAG, "Number of the page: $it")
                     apiService.getStoriesByPage(it)
@@ -244,6 +245,17 @@ class MainActivity : AppCompatActivity() {
     @Suppress("unused")
     private fun taskEighth() {
 
+        val executor = Executors.newFixedThreadPool(3)
+//        executor.execute { apiService.getStoriesByPage(0) }
+//        executor.execute { apiService.getStoriesByPage(1) }
+        Single.just(executor.execute { apiService.getStoriesByPage(0) }).subscribe(
+                { result ->
+                    Log.e(TAG, result.toString())
+                },
+                { error ->
+                    Log.e("test", error.message)
+                }
+        )
     }
 
     /**
