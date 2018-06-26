@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
 //        taskFifth()
 //        taskSixth()
 //        taskSeventh()
-        taskEighth()
-//        taskNinth()
+//        taskEighth()
+        taskNinth()
 //        taskTenth()
 //        taskEleventh()
     }
@@ -243,7 +243,7 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskEighth() {
-        ///TODO: "not implemented taskEighth
+
     }
 
     /**
@@ -254,7 +254,20 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskNinth() {
-        //TODO: "not implemented- taskNinth")
+        Observable.zip(Observable.range(0, 10), Observable.interval(1000L, TimeUnit.MILLISECONDS), BiFunction<Int, Long, Int> { t1: Int, _: Long ->
+            t1
+        })
+                .map {
+                    if (it == 7) {
+                        throw Exception("Your error message")
+                    } else {
+                        it
+                    }
+                }
+                .doOnError { Log.e(TAG, it.localizedMessage) }
+                .doOnSubscribe { Log.e(TAG, "Subscribed") }
+                .doOnNext { Log.e(TAG, it.toString()) }
+                .subscribe()
     }
 
     /**
