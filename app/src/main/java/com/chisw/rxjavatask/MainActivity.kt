@@ -233,7 +233,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     *Create 3 executors
+     *  Create 3 executors
      *  Load stories from page 0 in the thread 1
      *  Log thread
      *  Load stories from page 1 in the thread 2
@@ -256,7 +256,6 @@ class MainActivity : AppCompatActivity() {
     private fun taskNinth() {
         //TODO: "not implemented- taskNinth")
     }
-
 
     /**
      * Choose the most suitable Subject for the next task
