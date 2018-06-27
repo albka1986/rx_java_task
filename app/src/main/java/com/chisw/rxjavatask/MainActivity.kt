@@ -39,9 +39,9 @@ class MainActivity : AppCompatActivity() {
 //        taskFourth()
 //        taskFifth()
 //        taskSixth()
-//        taskSeventh()
+        taskSeventh()
 //        taskEighth()
-        taskNinth()
+//        taskNinth()
 //        taskTenth()
 //        taskEleventh()
     }
@@ -217,16 +217,10 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskSeventh() {
-        Observable.zip(Observable.range(0, 10), Observable.interval(1000L, TimeUnit.MILLISECONDS), BiFunction<Int, Long, Int> { t1: Int, _: Long ->
-            t1
-        })
-                .filter { t -> t % 2 != 0 }
-                .toList()
-                .map { it.sum() } //TODO Need to check here
-                .flatMap {
-                    Log.e(TAG, "Number of the page: $it")
-                    apiService.getStoriesByPage(it)
-                }
+        Observable.interval(1, TimeUnit.SECONDS)
+                .buffer(2)
+                .flatMapIterable { it }
+                .map { apiService.getStoriesByPage(it.toInt()) }
                 .subscribe(
                         { Log.e(TAG, "Successful") },
                         { Log.e(TAG, it.localizedMessage) }
@@ -245,17 +239,21 @@ class MainActivity : AppCompatActivity() {
     @Suppress("unused")
     private fun taskEighth() {
 
-        val executor = Executors.newFixedThreadPool(3)
-        executor.execute { Runnable { apiService.getStoriesByPage(0).log() }.run() }
-        executor.execute { Runnable { apiService.getStoriesByPage(1).log() }.run() }
-        executor.execute { Runnable { } }
+    /*    val executor1 = Executors.newFixedThreadPool(1)
+        executor1.execute { Runnable { apiService.getStoriesByPage(0).log() }.run() }
+
+        val executor2 = Executors.newFixedThreadPool(1)
+        executor2.execute { Runnable { apiService.getStoriesByPage(1).log() }.run() }
+
+        val executor3 = Executors.newFixedThreadPool(1)
+        executor3.execute { Runnable { } }
 
         apiService.getStoriesByPage(0).log()
                 .subscribeOn(Schedulers.from(executor))
 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
-
+*/
 
     }
 
@@ -302,7 +300,9 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskEleventh() {
-        apiService.getStoriesByPage(0)
+      /*  apiService.getStoriesByPage(0)
+                .subscribeOn(Schedulers.io())
+                .flatMap { t -> apiService.getStoriesByPage() }*/
     }
 
 
