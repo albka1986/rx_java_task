@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
 //        taskFifth()
 //        taskSixth()
 //        taskSeventh()
-        taskEighth()
-//        taskNinth()
+//        taskEighth()
+        taskNinth()
 //        taskTenth()
 //        taskEleventh()
     }
@@ -246,16 +246,17 @@ class MainActivity : AppCompatActivity() {
     private fun taskEighth() {
 
         val executor = Executors.newFixedThreadPool(3)
-//        executor.execute { apiService.getStoriesByPage(0) }
-//        executor.execute { apiService.getStoriesByPage(1) }
-        Single.just(executor.execute { apiService.getStoriesByPage(0) }).subscribe(
-                { result ->
-                    Log.e(TAG, result.toString())
-                },
-                { error ->
-                    Log.e("test", error.message)
-                }
-        )
+        executor.execute { Runnable { apiService.getStoriesByPage(0).log() }.run() }
+        executor.execute { Runnable { apiService.getStoriesByPage(1).log() }.run() }
+        executor.execute { Runnable { } }
+
+        apiService.getStoriesByPage(0).log()
+                .subscribeOn(Schedulers.from(executor))
+
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+
+
     }
 
     /**
@@ -266,11 +267,9 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskNinth() {
-        Observable.zip(Observable.range(0, 10), Observable.interval(1000L, TimeUnit.MILLISECONDS), BiFunction<Int, Long, Int> { t1: Int, _: Long ->
-            t1
-        })
+        Observable.interval(1, TimeUnit.SECONDS)
                 .map {
-                    if (it == 7) {
+                    if (it == 7L) {
                         throw Exception("Your error message")
                     } else {
                         it
@@ -303,7 +302,7 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskEleventh() {
-        //TODO: "not implemented - taskEleventh"
+        apiService.getStoriesByPage(0)
     }
 
 
