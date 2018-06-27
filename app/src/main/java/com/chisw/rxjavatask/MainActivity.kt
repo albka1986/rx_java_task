@@ -13,7 +13,6 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
-import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -39,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 //        taskFourth()
 //        taskFifth()
 //        taskSixth()
-        taskSeventh()
+//        taskSeventh()
 //        taskEighth()
 //        taskNinth()
 //        taskTenth()
@@ -47,8 +46,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-    Load stories from the 1 and 2 pages
-    Print a list of titles from two pages
+     *  Load stories from the 1 and 2 pages
+     *  Print a list of titles from two pages
      */
     @Suppress("unused")
     private fun taskFirst() {
@@ -239,21 +238,21 @@ class MainActivity : AppCompatActivity() {
     @Suppress("unused")
     private fun taskEighth() {
 
-    /*    val executor1 = Executors.newFixedThreadPool(1)
-        executor1.execute { Runnable { apiService.getStoriesByPage(0).log() }.run() }
+        /*    val executor1 = Executors.newFixedThreadPool(1)
+            executor1.execute { Runnable { apiService.getStoriesByPage(0).log() }.run() }
 
-        val executor2 = Executors.newFixedThreadPool(1)
-        executor2.execute { Runnable { apiService.getStoriesByPage(1).log() }.run() }
+            val executor2 = Executors.newFixedThreadPool(1)
+            executor2.execute { Runnable { apiService.getStoriesByPage(1).log() }.run() }
 
-        val executor3 = Executors.newFixedThreadPool(1)
-        executor3.execute { Runnable { } }
+            val executor3 = Executors.newFixedThreadPool(1)
+            executor3.execute { Runnable { } }
 
-        apiService.getStoriesByPage(0).log()
-                .subscribeOn(Schedulers.from(executor))
+            apiService.getStoriesByPage(0).log()
+                    .subscribeOn(Schedulers.from(executor))
 
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-*/
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
+    */
 
     }
 
@@ -300,9 +299,9 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskEleventh() {
-      /*  apiService.getStoriesByPage(0)
-                .subscribeOn(Schedulers.io())
-                .flatMap { t -> apiService.getStoriesByPage() }*/
+        /*  apiService.getStoriesByPage(0)
+                  .subscribeOn(Schedulers.io())
+                  .flatMap { t -> apiService.getStoriesByPage() }*/
     }
 
 
