@@ -13,6 +13,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 //        taskFourth()
 //        taskFifth()
 //        taskSixth()
-//        taskSeventh()
+        taskSeventh()
 //        taskEighth()
 //        taskNinth()
 //        taskTenth()
@@ -217,9 +218,13 @@ class MainActivity : AppCompatActivity() {
     @Suppress("unused")
     private fun taskSeventh() {
         Observable.interval(1, TimeUnit.SECONDS)
+                .takeWhile { it != 10L }
                 .buffer(2)
                 .flatMapIterable { it }
-                .map { apiService.getStoriesByPage(it.toInt()) }
+                .map {
+                    Log.e(TAG, it.toString())
+                    apiService.getStoriesByPage(it.toInt())
+                }
                 .subscribe(
                         { Log.e(TAG, "Successful") },
                         { Log.e(TAG, it.localizedMessage) }
@@ -238,21 +243,26 @@ class MainActivity : AppCompatActivity() {
     @Suppress("unused")
     private fun taskEighth() {
 
-        /*    val executor1 = Executors.newFixedThreadPool(1)
-            executor1.execute { Runnable { apiService.getStoriesByPage(0).log() }.run() }
+        val executor1 = Executors.newFixedThreadPool(1)
+        executor1.execute { Runnable { apiService.getStoriesByPage(0).log() }.run() }
 
-            val executor2 = Executors.newFixedThreadPool(1)
-            executor2.execute { Runnable { apiService.getStoriesByPage(1).log() }.run() }
+        val executor2 = Executors.newFixedThreadPool(1)
+        executor2.execute { Runnable { apiService.getStoriesByPage(1).log() }.run() }
 
-            val executor3 = Executors.newFixedThreadPool(1)
-            executor3.execute { Runnable { } }
+        val executor3 = Executors.newFixedThreadPool(1)
 
-            apiService.getStoriesByPage(0).log()
-                    .subscribeOn(Schedulers.from(executor))
+        val subscribe1 = apiService.getStoriesByPage(0).log()
+                .subscribeOn(Schedulers.from(executor1))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
 
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe()
-    */
+        val subscribe2 = apiService.getStoriesByPage(1).log()
+                .subscribeOn(Schedulers.from(executor2))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+
+//        Observable.zip()
+
 
     }
 
