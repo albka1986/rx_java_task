@@ -11,6 +11,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import java.util.concurrent.Executors
@@ -39,10 +40,10 @@ class MainActivity : AppCompatActivity() {
 //        taskFourth()
 //        taskFifth()
 //        taskSixth()
-        taskSeventh()
+//        taskSeventh()
 //        taskEighth()
 //        taskNinth()
-//        taskTenth()
+        taskTenth()
 //        taskEleventh()
     }
 
@@ -298,7 +299,14 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskTenth() {
-        //TODO: "not implemented- taskTenth")
+        val subject = BehaviorSubject.create<Int>()
+        subject.onNext(1)
+        subject.onNext(2)
+        subject.onNext(3)
+        subject.subscribe { Log.e(TAG, "Result: $it") }
+        subject.onNext(4)
+        subject.onNext(5)
+        subject.onNext(6)
     }
 
     /**
