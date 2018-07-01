@@ -1,15 +1,21 @@
 package com.chisw.rxjavatask
 
 import android.os.Bundle
+import android.support.annotation.MainThread
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.chisw.rxjavatask.model.AuthorNew
 import com.chisw.rxjavatask.model.Item
+import com.chisw.rxjavatask.model.User
 import com.chisw.rxjavatask.network.ApiService
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
+import io.reactivex.internal.functions.Functions
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,8 +49,8 @@ class MainActivity : AppCompatActivity() {
 //        taskSeventh()
 //        taskEighth()
 //        taskNinth()
-        taskTenth()
-//        taskEleventh()
+//        taskTenth()
+        taskEleventh()
     }
 
     /**
@@ -317,10 +323,24 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskEleventh() {
-        /*  apiService.getStoriesByPage(0)
-                  .subscribeOn(Schedulers.io())
-                  .flatMap { t -> apiService.getStoriesByPage() }*/
+        apiService.getStoriesByPage(0)
+                .toObservable()
+                .flatMap(
+                        Function<Item, Observable<User>> {
+                            return@Function apiService.getUserByName(it.hits[2].author).toObservable()
+                        },
+                        BiFunction { t1: Item, t2: User ->
+                            return@BiFunction AuthorNew(t2.username, t2.karma, t1.hits[2].story_title)
+                        }
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { Log.e(TAG, it.toString()) }
+
+
     }
 
-
 }
+
+
+
