@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
  */
 
 fun <T> Single<T>.log(): Single<T> {
-    Log.e(TAG, Thread.currentThread().name)
+    Log.e(TAG, "Extension: ${Thread.currentThread().name}")
     return this
 }
 

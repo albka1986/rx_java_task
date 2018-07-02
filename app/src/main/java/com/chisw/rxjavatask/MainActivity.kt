@@ -255,12 +255,12 @@ class MainActivity : AppCompatActivity() {
         val executor3 = Schedulers.from(Executors.newSingleThreadExecutor())
 
         apiService.getStoriesByPage(0)
-                .subscribeOn(executor1)
+                .subscribeOn(executor1).log()
                 .map {
                     Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
                     it.hits
                 }
-                .observeOn(executor2)
+                .observeOn(executor2).log()
                 .zipWith(apiService.getStoriesByPage(1).subscribeOn(executor2), BiFunction<List<Story>, Item, List<Story>> { t1, t2 ->
                     Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
                     return@BiFunction t1.plus(t2.hits)
@@ -269,7 +269,7 @@ class MainActivity : AppCompatActivity() {
                 .flatMapIterable { it }
                 .map { it.title }
                 .toList()
-                .observeOn(executor3)
+                .observeOn(executor3).log()
                 .subscribe(
                         {
                             Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
