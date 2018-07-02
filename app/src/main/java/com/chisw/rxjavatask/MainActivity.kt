@@ -1,21 +1,19 @@
 package com.chisw.rxjavatask
 
 import android.os.Bundle
-import android.support.annotation.MainThread
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.chisw.rxjavatask.model.AuthorNew
 import com.chisw.rxjavatask.model.Item
+import com.chisw.rxjavatask.model.Story
 import com.chisw.rxjavatask.model.User
 import com.chisw.rxjavatask.network.ApiService
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function
-import io.reactivex.internal.functions.Functions
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
@@ -47,10 +45,10 @@ class MainActivity : AppCompatActivity() {
 //        taskFifth()
 //        taskSixth()
 //        taskSeventh()
-//        taskEighth()
+        taskEighth()
 //        taskNinth()
 //        taskTenth()
-        taskEleventh()
+//        taskEleventh()
     }
 
     /**
@@ -250,25 +248,35 @@ class MainActivity : AppCompatActivity() {
     @Suppress("unused")
     private fun taskEighth() {
 
-        val executor1 = Executors.newFixedThreadPool(1)
-        executor1.execute { Runnable { apiService.getStoriesByPage(0).log() }.run() }
+        Log.e(TAG, "Task #8")
 
-        val executor2 = Executors.newFixedThreadPool(1)
-        executor2.execute { Runnable { apiService.getStoriesByPage(1).log() }.run() }
+        val executor1 = Schedulers.from(Executors.newSingleThreadExecutor())
+        val executor2 = Schedulers.from(Executors.newSingleThreadExecutor())
+        val executor3 = Schedulers.from(Executors.newSingleThreadExecutor())
 
-        val executor3 = Executors.newFixedThreadPool(1)
-
-        val subscribe1 = apiService.getStoriesByPage(0).log()
-                .subscribeOn(Schedulers.from(executor1))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-
-        val subscribe2 = apiService.getStoriesByPage(1).log()
-                .subscribeOn(Schedulers.from(executor2))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
-
-//        Observable.zip()
+        apiService.getStoriesByPage(0)
+                .subscribeOn(executor1)
+                .map {
+                    Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
+                    it.hits
+                }
+                .observeOn(executor2)
+                .zipWith(apiService.getStoriesByPage(1).subscribeOn(executor2), BiFunction<List<Story>, Item, List<Story>> { t1, t2 ->
+                    Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
+                    return@BiFunction t1.plus(t2.hits)
+                })
+                .toObservable()
+                .flatMapIterable { it }
+                .map { it.title }
+                .toList()
+                .observeOn(executor3)
+                .subscribe(
+                        {
+                            Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
+                            Log.e(TAG, it.toString())
+                        },
+                        { Log.e(TAG, it.localizedMessage) }
+                )
 
 
     }
@@ -336,8 +344,6 @@ class MainActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { Log.e(TAG, it.toString()) }
-
-
     }
 
 }
