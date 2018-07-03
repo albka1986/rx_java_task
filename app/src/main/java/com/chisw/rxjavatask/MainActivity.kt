@@ -7,7 +7,7 @@ import com.chisw.rxjavatask.model.AuthorNew
 import com.chisw.rxjavatask.model.Item
 import com.chisw.rxjavatask.model.Story
 import com.chisw.rxjavatask.model.User
-import com.chisw.rxjavatask.network.ApiService
+import com.chisw.rxjavatask.network.RetrofitManager
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val apiService by lazy {
-        ApiService.create()
+        return@lazy RetrofitManager.apiService
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onBtnPressed() {
-//        taskFirst()
+        taskFirst()
 //        taskSecond()
 //        taskThird()
 //        taskFourth()
