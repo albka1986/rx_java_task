@@ -42,9 +42,9 @@ class MainActivity : AppCompatActivity() {
 //        taskSecond()
 //        taskThird()
 //        taskFourth()
-//        taskFifth()
+        taskFifth()
 //        taskSixth()
-        taskSeventh()
+//        taskSeventh()
 //        taskEighth()
 //        taskNinth()
 //        taskTenth()
@@ -154,12 +154,13 @@ class MainActivity : AppCompatActivity() {
             } else {
                 emitter.onComplete()
             }
-        }.toSingle()
+        }
+                .switchIfEmpty(Single.just("You're live"))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { Log.e(TAG, it) },
-                        { Log.e(TAG, "You're live") }
+                        { Log.e(TAG, "Error") }
                 )
     }
 
@@ -222,7 +223,7 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskSeventh() {
-        Observable.intervalRange(0,10,0,1, TimeUnit.SECONDS)
+        Observable.intervalRange(0, 10, 0, 1, TimeUnit.SECONDS)
                 .takeWhile { it != 10L }
                 .buffer(2)
                 .flatMapIterable { it }
