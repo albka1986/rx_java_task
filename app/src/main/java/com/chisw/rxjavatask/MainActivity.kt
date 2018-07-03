@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 //        taskFourth()
 //        taskFifth()
 //        taskSixth()
-//        taskSeventh()
-        taskEighth()
+        taskSeventh()
+//        taskEighth()
 //        taskNinth()
 //        taskTenth()
 //        taskEleventh()
@@ -222,7 +222,7 @@ class MainActivity : AppCompatActivity() {
      */
     @Suppress("unused")
     private fun taskSeventh() {
-        Observable.interval(1, TimeUnit.SECONDS)
+        Observable.intervalRange(0,10,0,1, TimeUnit.SECONDS)
                 .takeWhile { it != 10L }
                 .buffer(2)
                 .flatMapIterable { it }
