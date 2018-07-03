@@ -15,8 +15,10 @@ import io.reactivex.schedulers.Schedulers
  */
 
 fun <T> Single<T>.log(): Single<T> {
-    Log.e(TAG, "Extension: ${Thread.currentThread().name}")
-    return this
+    return map {
+        Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
+        return@map it
+    }
 }
 
 fun <T> Single<T>.subscribeCustom(): Single<T> {

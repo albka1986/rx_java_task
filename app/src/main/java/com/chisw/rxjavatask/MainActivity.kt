@@ -38,14 +38,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onBtnPressed() {
-        taskFirst()
+//        taskFirst()
 //        taskSecond()
 //        taskThird()
 //        taskFourth()
-        taskFifth()
+//        taskFifth()
 //        taskSixth()
 //        taskSeventh()
-//        taskEighth()
+        taskEighth()
 //        taskNinth()
 //        taskTenth()
 //        taskEleventh()
@@ -258,12 +258,12 @@ class MainActivity : AppCompatActivity() {
         apiService.getStoriesByPage(0)
                 .subscribeOn(executor1).log()
                 .map {
-                    Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
+                    //                    Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
                     it.hits
                 }
                 .observeOn(executor2).log()
                 .zipWith(apiService.getStoriesByPage(1).subscribeOn(executor2), BiFunction<List<Story>, Item, List<Story>> { t1, t2 ->
-                    Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
+                    //                    Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
                     return@BiFunction t1.plus(t2.hits)
                 })
                 .toObservable()
@@ -273,7 +273,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(executor3).log()
                 .subscribe(
                         {
-                            Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
+                            //                            Log.e(TAG, "Current thread: ${Thread.currentThread().name}")
                             Log.e(TAG, it.toString())
                         },
                         { Log.e(TAG, it.localizedMessage) }
